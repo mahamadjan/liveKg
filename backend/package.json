@@ -14,7 +14,9 @@
   "type": "commonjs",
   "dependencies": {
     "@google/genai": "^2.8.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@prisma/client": "^5.22.0",
+    "@types/xml2js": "^0.4.14",
     "bcrypt": "^6.0.0",
     "cheerio": "^1.2.0",
     "cors": "^2.8.6",

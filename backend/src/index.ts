@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import nodemailer from 'nodemailer';
@@ -236,7 +236,7 @@ app.post('/api/pay', async (req, res) => {
     // We can also deduct balance here if needed
     // await prisma.user.update({ where: { id: decoded.userId }, data: { balance: { decrement: amount } } });
 
-    return res.json({ success: true, user });
+    return res.json({ success: true, transaction });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Server error' });
@@ -331,7 +331,7 @@ app.post('/api/jobs/:id/apply', async (req: Request, res: Response): Promise<any
     const { resume } = req.body;
     if (!resume) return res.status(400).json({ error: 'Resume text is required' });
 
-    const job = await prisma.job.findUnique({ where: { id: req.params.id } });
+    const job = await prisma.job.findUnique({ where: { id: String(req.params.id) } });
     if (!job) return res.status(404).json({ error: 'Job not found' });
     
     if (job.userId === applicantId) {
@@ -567,7 +567,7 @@ app.get('/api/chats/:id/messages', async (req: Request, res: Response): Promise<
     // Mark all unread messages from the other user as read
     await prisma.message.updateMany({
       where: {
-        chatId: req.params.id,
+        chatId: String(req.params.id),
         senderId: { not: decoded.userId },
         isRead: false
       },
@@ -575,7 +575,7 @@ app.get('/api/chats/:id/messages', async (req: Request, res: Response): Promise<
     });
 
     const messages = await prisma.message.findMany({
-      where: { chatId: req.params.id },
+      where: { chatId: String(req.params.id) },
       orderBy: { createdAt: 'asc' },
       include: { sender: { select: { id: true, name: true } } }
     });
@@ -599,20 +599,20 @@ app.post('/api/chats/:id/messages', async (req: Request, res: Response): Promise
     const message = await prisma.message.create({
       data: {
         text,
-        chatId: req.params.id,
+        chatId: String(req.params.id),
         senderId: decoded.userId
       },
       include: { sender: { select: { id: true, name: true } } }
     });
 
     await prisma.chat.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { updatedAt: new Date() }
     });
 
     try {
       const chat = await prisma.chat.findUnique({
-        where: { id: req.params.id }
+        where: { id: String(req.params.id) }
       });
       if (chat) {
         const recipientId = chat.user1Id === decoded.userId ? chat.user2Id : chat.user1Id;
@@ -1020,7 +1020,7 @@ app.put('/api/admin/users/:id/role', isAdmin, async (req: Request, res: Response
     }
 
     const user = await prisma.user.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { role }
     });
 
@@ -1034,13 +1034,13 @@ app.put('/api/admin/users/:id/role', isAdmin, async (req: Request, res: Response
 app.delete('/api/admin/users/:id', isAdmin, async (req: Request, res: Response): Promise<any> => {
   try {
     // Delete user's related data first (simplified for MVP, in real life you'd use cascade delete)
-    await prisma.message.deleteMany({ where: { senderId: req.params.id } });
-    await prisma.notification.deleteMany({ where: { userId: req.params.id } });
-    await prisma.application.deleteMany({ where: { userId: req.params.id } });
-    await prisma.job.deleteMany({ where: { userId: req.params.id } });
-    await prisma.transaction.deleteMany({ where: { userId: req.params.id } });
+    await prisma.message.deleteMany({ where: { senderId: String(req.params.id) } });
+    await prisma.notification.deleteMany({ where: { userId: String(req.params.id) } });
+    await prisma.application.deleteMany({ where: { userId: String(req.params.id) } });
+    await prisma.job.deleteMany({ where: { userId: String(req.params.id) } });
+    await prisma.transaction.deleteMany({ where: { userId: String(req.params.id) } });
     
-    await prisma.user.delete({ where: { id: req.params.id } });
+    await prisma.user.delete({ where: { id: String(req.params.id) } });
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
@@ -1063,8 +1063,8 @@ app.get('/api/admin/jobs', isAdmin, async (req: Request, res: Response): Promise
 // Admin: Delete Job
 app.delete('/api/admin/jobs/:id', isAdmin, async (req: Request, res: Response): Promise<any> => {
   try {
-    await prisma.application.deleteMany({ where: { jobId: req.params.id } });
-    await prisma.job.delete({ where: { id: req.params.id } });
+    await prisma.application.deleteMany({ where: { jobId: String(req.params.id) } });
+    await prisma.job.delete({ where: { id: String(req.params.id) } });
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
@@ -1212,7 +1212,7 @@ app.get('/api/news', async (req: Request, res: Response): Promise<any> => {
         await prisma.notification.create({
           data: {
             title: 'Свежая новость!',
-            message: latestFetchedTitle.substring(0, 80),
+            message: (latestFetchedTitle || '').substring(0, 80),
             userId: userId
           }
         });
@@ -1273,8 +1273,8 @@ app.get('/api/theaters/:id/schedule', async (req: Request, res: Response): Promi
     dordoi: 6
   };
 
-  if (cinematicaMapping[id]) {
-    const cinemaId = cinematicaMapping[id];
+  if (cinematicaMapping[String(id)]) {
+    const cinemaId = cinematicaMapping[String(id)];
     const cacheKey = `cinematica_${cinemaId}`;
 
     if (schedulesCache[cacheKey] && now - schedulesCache[cacheKey].timestamp < 600000) {
