@@ -1366,7 +1366,7 @@ app.get('/theaters/:id/schedule', async (req: Request, res: Response): Promise<a
   }
 });
 
-export default app;
+module.exports = app;
 
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
