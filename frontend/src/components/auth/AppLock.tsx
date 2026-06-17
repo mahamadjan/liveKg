@@ -12,11 +12,11 @@ export const AppLock = ({ children }: AppLockProps) => {
   const [isLocked, setIsLocked] = useState(true);
   const [pin, setPin] = useState('');
   const [error, setError] = useState(false);
-  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+  const [, setIsBiometricSupported] = useState(false);
 
   const [savedPin, setSavedPin] = useState<string | null>(null);
   const [biometricsEnabled, setBiometricsEnabled] = useState(false);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     // Check if device supports biometrics (WebAuthn)

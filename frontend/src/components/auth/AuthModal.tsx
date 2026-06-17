@@ -13,7 +13,7 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
   const [step, setStep] = useState<'contact' | 'otp' | 'setup_pin' | 'confirm_pin' | 'success'>('contact');
   const [contact, setContact] = useState('');
   const [code, setCode] = useState('');
-  const [method, setMethod] = useState<'email' | 'phone'>('email');
+  const [, setMethod] = useState<'email' | 'phone'>('email');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [newPin, setNewPin] = useState('');

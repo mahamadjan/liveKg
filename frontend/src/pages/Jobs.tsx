@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlassCard } from '../components/ui/GlassCard';
-import { Search, MapPin, DollarSign, Briefcase, Filter, Plus, Loader2, Send } from 'lucide-react';
+import { Search, MapPin, DollarSign, Briefcase, Plus, Loader2, Send } from 'lucide-react';
 import { CreateJobModal } from '../components/jobs/CreateJobModal';
 import { ApplyModal } from '../components/jobs/ApplyModal';
 import { CustomSelect } from '../components/ui/CustomSelect';
@@ -143,7 +143,7 @@ export const Jobs = () => {
                 layout
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, duration: 0.2 }}
+                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
               >
                 <GlassCard hoverEffect={true} className="!p-5 cursor-pointer group">

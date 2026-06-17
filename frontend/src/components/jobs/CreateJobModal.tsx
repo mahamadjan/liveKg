@@ -79,7 +79,7 @@ export const CreateJobModal = ({ isOpen, onClose, onSuccess }: CreateJobModalPro
       if (data.success) {
         onSuccess();
         onClose();
-        setFormData({ title: '', company: '', location: '', salary: '', type: 'Полный день', tags: '' });
+        setFormData({ title: '', profession: 'Frontend Разработчик', company: '', location: 'Бишкек', salary: '', type: 'Полный день', experience: 'Без опыта', education: 'Любое', ageRange: 'Любой', tags: '' });
       } else {
         setError(data.error || 'Ошибка публикации');
       }

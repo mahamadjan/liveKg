@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Briefcase, Trash2, Shield, Loader2, ArrowLeft } from 'lucide-react';
 import { GlassCard } from '../components/ui/GlassCard';
 import { useNavigate } from 'react-router-dom';

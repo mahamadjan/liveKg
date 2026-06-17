@@ -73,7 +73,7 @@ export const Transport = () => {
   const [busPositions, setBusPositions] = useState<{ id: number; routeId: number; pos: [number, number] }[]>([]);
 
   // Simulation step
-  const [progress, setProgress] = useState(0);
+  const [, setProgress] = useState(0);
 
   useEffect(() => {
     // This effect runs an animation loop moving buses along their path
@@ -134,7 +134,7 @@ export const Transport = () => {
           setUserLocation([position.coords.latitude, position.coords.longitude]);
           setLocationError(null);
         },
-        (error) => {
+        () => {
           setLocationError("Не удалось получить локацию. Проверьте настройки браузера.");
         },
         { enableHighAccuracy: true }

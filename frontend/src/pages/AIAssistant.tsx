@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Send, Sparkles, User, Loader2, Paperclip, X, Copy, Check, Menu, MessageSquare, Plus, Bot, Palette, Image as ImageIcon } from 'lucide-react';
+import { ChevronLeft, Send, User, Loader2, Paperclip, X, Copy, Check, Menu, MessageSquare, Plus, Bot, Palette, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';

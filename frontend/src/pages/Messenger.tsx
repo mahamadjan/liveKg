@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Loader2, MessageSquare, Search, Send, User, ArrowLeft } from 'lucide-react';
 import { GlassCard } from '../components/ui/GlassCard';
 
@@ -11,7 +11,7 @@ export const Messenger = () => {
   const [newMessage, setNewMessage] = useState('');
   const [loadingMessages, setLoadingMessages] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const currentUserId = localStorage.getItem('userId'); // Assuming we can get current user ID, wait, we don't have it in localStorage directly unless we save it. We'll derive it from token or just let the API handle the names.
+
 
   useEffect(() => {
     fetchChats();

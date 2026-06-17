@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Mail, Shield, LogOut, Camera, X, Palette, Globe, Smartphone, Fingerprint, MapPin, Save } from 'lucide-react';
+import { User, Shield, LogOut, Camera, X, Palette, Globe } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { useTranslation } from 'react-i18next';
 
