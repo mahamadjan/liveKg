@@ -939,7 +939,7 @@ app.get('/api/guides', async (req: Request, res: Response): Promise<any> => {
   }
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 // Get Current User Info
 app.get('/api/users/me', async (req: Request, res: Response): Promise<any> => {
   try {
