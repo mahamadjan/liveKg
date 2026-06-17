@@ -23,7 +23,7 @@ export const Jobs = () => {
 
   const fetchJobs = () => {
     setLoading(true);
-    fetch('http://localhost:3001/api/jobs')
+    fetch('/api/jobs')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {

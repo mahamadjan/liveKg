@@ -44,7 +44,7 @@ export const AdminPanel = () => {
 
   const changeRole = async (userId: string, newRole: string) => {
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/users/${userId}/role`, {
+      const res = await fetch(`/api/admin/users/${userId}/role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export const AdminPanel = () => {
   const deleteUser = async (userId: string) => {
     if (!confirm('Точно удалить пользователя и все его данные?')) return;
     try {
-      await fetch(`http://localhost:3001/api/admin/users/${userId}`, {
+      await fetch(`/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
@@ -79,7 +79,7 @@ export const AdminPanel = () => {
   const deleteJob = async (jobId: string) => {
     if (!confirm('Точно удалить вакансию?')) return;
     try {
-      await fetch(`http://localhost:3001/api/admin/jobs/${jobId}`, {
+      await fetch(`/api/admin/jobs/${jobId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });

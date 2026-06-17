@@ -52,7 +52,7 @@ function App() {
         const token = localStorage.getItem('token') || localStorage.getItem('life_kg_token');
         if (!token) return;
 
-        const res = await fetch('http://localhost:3001/api/notifications', {
+        const res = await fetch('/api/notifications', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!res.ok) return;

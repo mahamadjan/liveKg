@@ -66,7 +66,7 @@ export const CreateJobModal = ({ isOpen, onClose, onSuccess }: CreateJobModalPro
     }
 
     try {
-      const res = await fetch('http://localhost:3001/api/jobs', {
+      const res = await fetch('/api/jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

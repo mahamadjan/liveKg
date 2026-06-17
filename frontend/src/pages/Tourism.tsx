@@ -46,8 +46,8 @@ export const Tourism = () => {
   const fetchData = async () => {
     try {
       const [toursRes, guidesRes] = await Promise.all([
-        fetch('http://localhost:3001/api/tours'),
-        fetch('http://localhost:3001/api/guides')
+        fetch('/api/tours'),
+        fetch('/api/guides')
       ]);
       const toursData = await toursRes.json();
       const guidesData = await guidesRes.json();

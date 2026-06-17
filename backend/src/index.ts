@@ -42,7 +42,7 @@ console.log('Real Gmail SMTP Configured.');
 // ---------------------------------------------------------
 
 // 1. Send OTP (Email or Phone)
-app.post('/api/auth/send-code', async (req, res) => {
+app.post('/auth/send-code', async (req, res) => {
   const { contact, method } = req.body; // method: 'email' or 'phone'
   if (!contact || !method) return res.status(400).json({ error: 'Missing contact info' });
 
@@ -91,7 +91,7 @@ app.post('/api/auth/send-code', async (req, res) => {
 });
 
 // 2. Verify OTP & Login/Register
-app.post('/api/auth/verify', async (req, res) => {
+app.post('/auth/verify', async (req, res) => {
   const { contact, code } = req.body;
 
   // Find valid OTP
@@ -131,7 +131,7 @@ app.post('/api/auth/verify', async (req, res) => {
 });
 
 // 3. Google OAuth Verification
-app.post('/api/auth/google', async (req, res) => {
+app.post('/auth/google', async (req, res) => {
   const { access_token } = req.body;
   if (!access_token) return res.status(400).json({ error: 'Missing access_token' });
 
@@ -159,7 +159,7 @@ app.post('/api/auth/google', async (req, res) => {
 });
 
 // 4. Get Profile (Protected)
-app.get('/api/profile', async (req, res) => {
+app.get('/profile', async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'No token provided' });
 
@@ -175,7 +175,7 @@ app.get('/api/profile', async (req, res) => {
 });
 
 // 5. Update Profile
-app.put('/api/users/me', async (req, res) => {
+app.put('/users/me', async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'No token' });
   try {
@@ -193,7 +193,7 @@ app.put('/api/users/me', async (req, res) => {
 
 // 6. Upload Avatar
 const upload = multer({ dest: path.join(__dirname, '../uploads/') });
-app.post('/api/upload', upload.single('avatar'), async (req, res) => {
+app.post('/upload', upload.single('avatar'), async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'No token' });
   try {
@@ -216,7 +216,7 @@ app.post('/api/upload', upload.single('avatar'), async (req, res) => {
 });
 
 // 7. Process Payment
-app.post('/api/pay', async (req, res) => {
+app.post('/pay', async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'No token' });
   try {
@@ -248,7 +248,7 @@ app.post('/api/pay', async (req, res) => {
 // ==========================================
 
 // Get all jobs
-app.get('/api/jobs', async (req, res) => {
+app.get('/jobs', async (req, res) => {
   try {
     const jobs = await prisma.job.findMany({
       orderBy: { createdAt: 'desc' }
@@ -261,7 +261,7 @@ app.get('/api/jobs', async (req, res) => {
 });
 
 // Create a new job
-app.post('/api/jobs', async (req: Request, res: Response): Promise<any> => {
+app.post('/jobs', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -320,7 +320,7 @@ app.post('/api/jobs', async (req: Request, res: Response): Promise<any> => {
 // ==========================================
 
 // Apply to a job
-app.post('/api/jobs/:id/apply', async (req: Request, res: Response): Promise<any> => {
+app.post('/jobs/:id/apply', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -391,7 +391,7 @@ app.post('/api/jobs/:id/apply', async (req: Request, res: Response): Promise<any
 });
 
 // AI Chat Route
-app.post('/api/ai/chat', async (req, res) => {
+app.post('/ai/chat', async (req, res) => {
   try {
     const { message, image, history } = req.body;
     if (!message && !image) return res.status(400).json({ error: 'Message or image is required' });
@@ -455,7 +455,7 @@ app.post('/api/ai/chat', async (req, res) => {
 });
 
 // Get Notifications
-app.get('/api/notifications', async (req: Request, res: Response): Promise<any> => {
+app.get('/notifications', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -473,7 +473,7 @@ app.get('/api/notifications', async (req: Request, res: Response): Promise<any> 
 });
 
 // Mark all notifications as read
-app.post('/api/notifications/read', async (req: Request, res: Response): Promise<any> => {
+app.post('/notifications/read', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -492,7 +492,7 @@ app.post('/api/notifications/read', async (req: Request, res: Response): Promise
 });
 
 // Get Chats
-app.get('/api/chats', async (req: Request, res: Response): Promise<any> => {
+app.get('/chats', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -535,7 +535,7 @@ app.get('/api/chats', async (req: Request, res: Response): Promise<any> => {
 });
 
 // Get unread messages count
-app.get('/api/chats/unread', async (req: Request, res: Response): Promise<any> => {
+app.get('/chats/unread', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -557,7 +557,7 @@ app.get('/api/chats/unread', async (req: Request, res: Response): Promise<any> =
 });
 
 // Get Messages for a Chat
-app.get('/api/chats/:id/messages', async (req: Request, res: Response): Promise<any> => {
+app.get('/chats/:id/messages', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -586,7 +586,7 @@ app.get('/api/chats/:id/messages', async (req: Request, res: Response): Promise<
 });
 
 // Send Message
-app.post('/api/chats/:id/messages', async (req: Request, res: Response): Promise<any> => {
+app.post('/chats/:id/messages', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -644,7 +644,7 @@ let toursCache: any[] = [];
 let toursLastFetched = 0;
 
 // Seed and get tours
-app.get('/api/tours', async (req: Request, res: Response): Promise<any> => {
+app.get('/tours', async (req: Request, res: Response): Promise<any> => {
   try {
     const now = Date.now();
     // Cache for 15 minutes (900000 ms)
@@ -810,7 +810,7 @@ app.get('/api/tours', async (req: Request, res: Response): Promise<any> => {
 });
 
 // Create Tour
-app.post('/api/tours', async (req: Request, res: Response): Promise<any> => {
+app.post('/tours', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -832,7 +832,7 @@ app.post('/api/tours', async (req: Request, res: Response): Promise<any> => {
 });
 
 // Get Guides
-app.get('/api/guides', async (req: Request, res: Response): Promise<any> => {
+app.get('/guides', async (req: Request, res: Response): Promise<any> => {
   try {
     let guides = await prisma.guide.findMany({
       include: { user: { select: { name: true, avatar: true, phone: true } } },
@@ -941,7 +941,7 @@ app.get('/api/guides', async (req: Request, res: Response): Promise<any> => {
 
 const PORT = process.env.PORT || 3001;
 // Get Current User Info
-app.get('/api/users/me', async (req: Request, res: Response): Promise<any> => {
+app.get('/users/me', async (req: Request, res: Response): Promise<any> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Unauthorized' });
@@ -982,7 +982,7 @@ const isAdmin = async (req: Request, res: Response, next: any) => {
 };
 
 // Admin: Get Dashboard Stats
-app.get('/api/admin/stats', isAdmin, async (req: Request, res: Response): Promise<any> => {
+app.get('/admin/stats', isAdmin, async (req: Request, res: Response): Promise<any> => {
   try {
     const usersCount = await prisma.user.count();
     const jobsCount = await prisma.job.count();
@@ -994,7 +994,7 @@ app.get('/api/admin/stats', isAdmin, async (req: Request, res: Response): Promis
 });
 
 // Admin: Get Users
-app.get('/api/admin/users', isAdmin, async (req: Request, res: Response): Promise<any> => {
+app.get('/admin/users', isAdmin, async (req: Request, res: Response): Promise<any> => {
   try {
     const users = await prisma.user.findMany({
       orderBy: { createdAt: 'desc' },
@@ -1007,7 +1007,7 @@ app.get('/api/admin/users', isAdmin, async (req: Request, res: Response): Promis
 });
 
 // Admin: Change User Role (Only SuperAdmin can do this)
-app.put('/api/admin/users/:id/role', isAdmin, async (req: Request, res: Response): Promise<any> => {
+app.put('/admin/users/:id/role', isAdmin, async (req: Request, res: Response): Promise<any> => {
   try {
     const adminUser = (req as any).adminUser;
     if (adminUser.role !== 'SUPERADMIN') {
@@ -1031,7 +1031,7 @@ app.put('/api/admin/users/:id/role', isAdmin, async (req: Request, res: Response
 });
 
 // Admin: Delete User
-app.delete('/api/admin/users/:id', isAdmin, async (req: Request, res: Response): Promise<any> => {
+app.delete('/admin/users/:id', isAdmin, async (req: Request, res: Response): Promise<any> => {
   try {
     // Delete user's related data first (simplified for MVP, in real life you'd use cascade delete)
     await prisma.message.deleteMany({ where: { senderId: String(req.params.id) } });
@@ -1048,7 +1048,7 @@ app.delete('/api/admin/users/:id', isAdmin, async (req: Request, res: Response):
 });
 
 // Admin: Get all Jobs
-app.get('/api/admin/jobs', isAdmin, async (req: Request, res: Response): Promise<any> => {
+app.get('/admin/jobs', isAdmin, async (req: Request, res: Response): Promise<any> => {
   try {
     const jobs = await prisma.job.findMany({
       include: { user: { select: { id: true, name: true, email: true, phone: true } } },
@@ -1061,7 +1061,7 @@ app.get('/api/admin/jobs', isAdmin, async (req: Request, res: Response): Promise
 });
 
 // Admin: Delete Job
-app.delete('/api/admin/jobs/:id', isAdmin, async (req: Request, res: Response): Promise<any> => {
+app.delete('/admin/jobs/:id', isAdmin, async (req: Request, res: Response): Promise<any> => {
   try {
     await prisma.application.deleteMany({ where: { jobId: String(req.params.id) } });
     await prisma.job.delete({ where: { id: String(req.params.id) } });
@@ -1075,7 +1075,7 @@ app.delete('/api/admin/jobs/:id', isAdmin, async (req: Request, res: Response): 
 // ==========================================
 
 // Seed and get clinics
-app.get('/api/clinics', async (req: Request, res: Response): Promise<any> => {
+app.get('/clinics', async (req: Request, res: Response): Promise<any> => {
   try {
     let clinics = await prisma.clinic.findMany();
     if (clinics.length === 0) {
@@ -1097,7 +1097,7 @@ app.get('/api/clinics', async (req: Request, res: Response): Promise<any> => {
 });
 
 // Get doctors
-app.get('/api/doctors', async (req: Request, res: Response): Promise<any> => {
+app.get('/doctors', async (req: Request, res: Response): Promise<any> => {
   try {
     const doctors = await prisma.doctor.findMany({ include: { clinic: true } });
     res.json(doctors);
@@ -1107,7 +1107,7 @@ app.get('/api/doctors', async (req: Request, res: Response): Promise<any> => {
 });
 
 // Create appointment
-app.post('/api/appointments', async (req: Request, res: Response): Promise<any> => {
+app.post('/appointments', async (req: Request, res: Response): Promise<any> => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'No token' });
   try {
@@ -1129,7 +1129,7 @@ app.post('/api/appointments', async (req: Request, res: Response): Promise<any> 
 });
 
 // Get my appointments
-app.get('/api/appointments/me', async (req: Request, res: Response): Promise<any> => {
+app.get('/appointments/me', async (req: Request, res: Response): Promise<any> => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'No token' });
   try {
@@ -1152,7 +1152,7 @@ const parser = new Parser();
 let newsCache: any[] = [];
 let newsLastFetched = 0;
 
-app.get('/api/news', async (req: Request, res: Response): Promise<any> => {
+app.get('/news', async (req: Request, res: Response): Promise<any> => {
   try {
     const now = Date.now();
     // Cache for 5 minutes (300,000 ms)
@@ -1235,7 +1235,7 @@ app.get('/api/news', async (req: Request, res: Response): Promise<any> => {
 let moviesCache: any[] = [];
 let moviesLastFetched = 0;
 
-app.get('/api/movies', async (req: Request, res: Response): Promise<any> => {
+app.get('/movies', async (req: Request, res: Response): Promise<any> => {
   try {
     const now = Date.now();
     // Cache for 15 minutes
@@ -1262,7 +1262,7 @@ interface TheaterScheduleCacheItem {
 }
 const schedulesCache: Record<string, TheaterScheduleCacheItem> = {};
 
-app.get('/api/theaters/:id/schedule', async (req: Request, res: Response): Promise<any> => {
+app.get('/theaters/:id/schedule', async (req: Request, res: Response): Promise<any> => {
   const { id } = req.params;
   const now = Date.now();
 
