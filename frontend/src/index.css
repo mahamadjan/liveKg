@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0a0a0a;
+  --color-surface: rgba(255, 255, 255, 0.03);
+  --color-surfaceHover: rgba(255, 255, 255, 0.06);
+  --color-surfaceBorder: rgba(255, 255, 255, 0.08);
+  --color-primary: #E53935;
+  --color-secondary: #FADB14;
+  --color-textMain: #EDEDED;
+  --color-textMuted: #A1A1AA;
+  
+  --font-sans: "Inter", "SF Pro Display", "system-ui", "sans-serif";
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-textMain);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+:root.light {
+  --color-background: #f8fafc;
+  --color-surface: rgba(0, 0, 0, 0.03);
+  --color-surfaceHover: rgba(0, 0, 0, 0.06);
+  --color-surfaceBorder: rgba(0, 0, 0, 0.08);
+  --color-textMain: #0f172a;
+  --color-textMuted: #64748b;
+}
+
+:root.light .glass {
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* Light theme utility overrides for hardcoded white alphas */
+:root.light .bg-white\/5 { background-color: rgba(0, 0, 0, 0.05); }
+:root.light .bg-white\/10 { background-color: rgba(0, 0, 0, 0.1); }
+:root.light .border-white\/10 { border-color: rgba(0, 0, 0, 0.1); }
+:root.light .border-white\/5 { border-color: rgba(0, 0, 0, 0.05); }
+:root.light .hover\:bg-white\/5:hover { background-color: rgba(0, 0, 0, 0.08); }
+:root.light .hover\:bg-white\/10:hover { background-color: rgba(0, 0, 0, 0.15); }
+
+/* Ensure primary buttons always have white text */
+.bg-primary, .bg-green-500, .bg-red-500 {
+  color: #fff !important;
+}
+
+@utility glass {
+  background-color: var(--color-surface);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--color-surfaceBorder);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+@utility glass-card {
+  @apply glass;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  transition: all 300ms;
+}
+
+.glass-card:hover {
+  background-color: var(--color-surfaceHover);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+@utility text-gradient {
+  background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, #ef4444, var(--color-primary), #eab308);
+}
+
+@utility flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Custom premium scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+::selection {
+  background: rgba(229, 57, 53, 0.3);
+  color: #fff;
+}

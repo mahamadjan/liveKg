@@ -1,0 +1,181 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String?  @unique
+  phone     String?  @unique
+  name      String?
+  avatar    String?  // URL to uploaded profile picture
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isVerified Boolean @default(false)
+  role      String   @default("USER") // USER, ADMIN, SUPERADMIN
+  balance   Int      @default(0)
+  transactions Transaction[]
+  jobs      Job[]
+  notifications Notification[]
+  applications Application[]
+  messages  Message[]
+  chats1    Chat[] @relation("ChatUser1")
+  chats2    Chat[] @relation("ChatUser2")
+  appointments Appointment[]
+  tours        Tour[]
+  guide        Guide?
+}
+
+model Job {
+  id          String   @id @default(uuid())
+  title       String   // Title could be "Требуется синьор"
+  profession  String   @default("Другое") // Predefined profession
+  company     String
+  location    String
+  salary      String
+  type        String   // e.g. "Полный день", "Удаленно"
+  experience  String   @default("Без опыта")
+  education   String   @default("Среднее")
+  ageRange    String   @default("Любой")
+  tags        String   // comma-separated
+  createdAt   DateTime @default(now())
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  applications Application[]
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  amount    Int
+  title     String
+  type      String   // 'expense' or 'income'
+  createdAt DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Otp {
+  id        String   @id @default(uuid())
+  code      String
+  target    String   // email or phone
+  expiresAt DateTime
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Application {
+  id        String   @id @default(uuid())
+  resume    String   // Resume text
+  status    String   @default("pending") // pending, accepted, rejected
+  createdAt DateTime @default(now())
+  
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id])
+  
+  userId    String   // The applicant
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Chat {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  user1Id   String
+  user1     User     @relation("ChatUser1", fields: [user1Id], references: [id])
+  
+  user2Id   String
+  user2     User     @relation("ChatUser2", fields: [user2Id], references: [id])
+  
+  messages  Message[]
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  text      String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id])
+}
+
+model Clinic {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  phone     String?
+  image     String?
+  doctors   Doctor[]
+}
+
+model Doctor {
+  id          String   @id @default(uuid())
+  name        String
+  specialty   String
+  experience  Int      // years
+  rating      Float    @default(0)
+  fee         Int      // appointment cost in KGS
+  image       String?
+  
+  clinicId    String
+  clinic      Clinic   @relation(fields: [clinicId], references: [id])
+  
+  appointments Appointment[]
+}
+
+model Appointment {
+  id        String   @id @default(uuid())
+  date      String   // ISO string or YYYY-MM-DD
+  time      String   // e.g., "14:30"
+  status    String   @default("pending") // pending, confirmed, completed, cancelled
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  
+  createdAt DateTime @default(now())
+}
+
+model Tour {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  duration    Int
+  difficulty  String
+  location    String
+  images      String   @default("[]") // JSON string of image URLs
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Guide {
+  id          String   @id @default(uuid())
+  languages   String   @default("[]") // JSON string
+  experience  Int
+  rating      Float    @default(5.0)
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+}
